@@ -1,7 +1,6 @@
 <!DOCTYPE HTML><html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="stylesheet.css" /> 
   <style>
     body { text-align:center; }
     .vert { margin-bottom: 10%; }
@@ -16,28 +15,17 @@
       <button onclick="rotatePhoto();">ROTATE</button>
       <button onclick="capturePhoto()">CAPTURE PHOTO</button>
       <button onclick="location.reload();">REFRESH PAGE</button>
-      <label class="switch">
-        <input id="toggleswitch" type="checkbox">
-        <span class="slider"></span>
-      </label>
+      <label class="switch"><input type="checkbox" onchange="toggleCheckbox(this)"></span class="slider"></span></label>
     </p>
   </div>
   <div><img src="saved-photo" id="photo" width="30%"></div>
-</body>
 <script>
   var deg = 0;
-  document.getElementById("toggleswitch").addEventListener('click', toggle_changed);
-  function toggle_changed(){
-    if(document.getElementById("toggleswitch").checked == true){
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', "/on", true);
-      xhr.send();
-    }
-    else if (document.getElementById("toggleswitch").checked == false){
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', "/off", true);
-      xhr.send();
-    }
+  function toggleCheckbox(element) {
+    var xhr = new XMLHttpRequest();
+    if(element.checked){ xhr.open("GET", "/update?state=1", true); }
+    else { xhr.open("GET", "/update?state=0", true); }
+    xhr.send();
   }
   function capturePhoto() {
     var xhr = new XMLHttpRequest();
@@ -54,4 +42,5 @@
   
   function isOdd(n) { return Math.abs(n % 2) == 1; }
 </script>
+</body>
 </html>

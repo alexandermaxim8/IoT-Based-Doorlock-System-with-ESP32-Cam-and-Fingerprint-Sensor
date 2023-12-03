@@ -32,6 +32,7 @@ const char* password = "yungyao3";
 AsyncWebServer server(80);
 
 boolean takeNewPhoto = false;
+String parameter;
 
 // Photo File Name to save in SPIFFS
 #define FILE_PHOTO "/photo.jpg"
@@ -135,9 +136,9 @@ void setup() {
     }
   });
 
-  server.on("/stylesheet.css", HTTP_GET, [](AsyncWebServerRequest *request){
+  /*server.on("/stylesheet.css", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/stylesheet.css", "text/css");
-  });
+  });*/
 
   server.on("/capture", HTTP_GET, [](AsyncWebServerRequest * request) {
     takeNewPhoto = true;
@@ -148,31 +149,28 @@ void setup() {
     request->send(SPIFFS, FILE_PHOTO, "image/jpg", false);
   });
 
-  server.on("/on", HTTP_GET, [](AsyncWebServerRequest *request){
-    digitalWrite(solPin, HIGH);
-    state = HIGH;    
-    request->send(SPIFFS, "/webpage.html", String());
+  server.on("/update", HTTP_GET, [](AsyncWebServerRequest * request) {
+    if (request->hasParam("state")){
+      parameter = request->getParam("state")->value();
+      digitalWrite(solPin, parameter.toInt());
+    }
+    request->send(SPIFFS, "/webpage.html", "OK");
   });
-  
-  // Route to set GPIO to LOW
-  server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request){
-    digitalWrite(solPin, LOW);  
-    state = LOW;  
-    request->send(SPIFFS, "/webpage.html", String());
-  });
-
   // Start server
   server.begin();
 
 }
 
 void loop() {
+  if (digitalRead(IRPin)){
+    takeNewPhoto = true;
+  }
   if (takeNewPhoto) {
     capturePhotoSaveSpiffs();
     takeNewPhoto = false;
   }
   delay(1);
-  Serial.println(state);
+  Serial.println(parameter);
 }
 
 // Check if photo capture was successful
@@ -189,18 +187,21 @@ void capturePhotoSaveSpiffs( void ) {
 
   do {
     // Take a photo with the camera
+    digitalWrite(LED_BUILTIN, HIGH);
     Serial.println("Taking a photo...");
 
     fb = esp_camera_fb_get();
     if (!fb) {
       Serial.println("Camera capture failed");
+      digitalWrite(LED_BUILTIN, LOW);
       return;
     }
-
+   
     // Photo file name
     Serial.printf("Picture file name: %s\n", FILE_PHOTO);
     File file = SPIFFS.open(FILE_PHOTO, FILE_WRITE);
-
+    digitalWrite(LED_BUILTIN, LOW);
+    
     // Insert the data in the photo file
     if (!file) {
       Serial.println("Failed to open file in writing mode");
@@ -219,5 +220,6 @@ void capturePhotoSaveSpiffs( void ) {
 
     // check if file has been correctly saved in SPIFFS
     ok = checkPhoto(SPIFFS);
+    
   } while ( !ok );
 }
