@@ -25,8 +25,8 @@
 #include <FS.h>
 
 // Replace with your network credentials
-const char* ssid = "ellesse_EXT";
-const char* password = "yungyao3";
+const char* ssid = "Galaxy A512844";
+const char* password = "12341234";
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -55,8 +55,9 @@ String parameter;
 #define HREF_GPIO_NUM     23
 #define PCLK_GPIO_NUM     22
 
-
+const int IRPin = 14;
 const int solPin = 13;
+const int LED_BUILTIN = 4;
 String solState;
 bool state;
 
@@ -64,6 +65,9 @@ bool state;
 void setup() {
   // Serial port for debugging purposes
   Serial.begin(115200);
+  pinMode(IRPin, INPUT);
+  pinMode(solPin, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
 
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
@@ -162,7 +166,7 @@ void setup() {
 }
 
 void loop() {
-  if (digitalRead(IRPin)){
+  if (digitalRead(IRPin)==HIGH){
     takeNewPhoto = true;
   }
   if (takeNewPhoto) {
