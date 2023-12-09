@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>DOOR LOCK SYSTEM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+</head>
+<body>
+  <div class="topnav">
+    <h1>DOOR LOCK SYSTEM</h1>
+  </div>
+  <div class="content">
+    <p>It might take more than 5 seconds to capture a photo.</p>
+    <p>
+      <button onclick="rotatePhoto();">ROTATE</button>
+      <button onclick="capturePhoto()">CAPTURE PHOTO</button>
+      <button onclick="location.reload();">REFRESH PAGE</button>
+    </p>
+    <p>Please wait...</p>
+    <div><img src="saved-photo" id="photo" width="30%"></div>
+    <p>Please slide the slider below to lock or unlock the door</p>
+    <label class="switch">
+      <input type="checkbox" onchange="toggleCheckbox(this)">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <script>
+    var deg = 0;
+
+    function toggleCheckbox(element) {
+      var xhr = new XMLHttpRequest();
+      if (element.checked) {
+        xhr.open("GET", "/lock?state=1", true);
+      } else {
+        xhr.open("GET", "/lock?state=0", true);
+      }
+      xhr.send();
+    }
+
+    function capturePhoto() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', "/capture", true);
+      xhr.send();
+    }
+
+    function rotatePhoto() {
+      var img = document.getElementById("photo");
+      deg += 90;
+      img.style.transform = "rotate(" + deg + "deg)";
+    }
+  </script>
+</body>
+</html>
