@@ -31,8 +31,8 @@
 const char* ssid = "Galaxy A512844";
 const char* password = "12341234";
 
-String phoneNumber = "628977542455";
-String apiKey = "1839112";
+String phoneNumber = "6289519653806";
+String apiKey = "5058852";
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -175,14 +175,6 @@ void setup() {
   server.on("/lock", HTTP_GET, [](AsyncWebServerRequest * request) {
     if (request->hasParam("state")){
       parameter = request->getParam("state")->value();
-      //Wire.beginTransmission(1);
-      //Wire.write(parameter.toInt());
-      //Wire.endTransmission();
-      // if (parameter.toInt()==1){
-      //  Serial.println("tot");
-      //  request->send_P(200, "text/plain", "1");
-      //}else if(parameter.toInt()==0){
-      //  request->send_P(200, "text/plain", "0");
       }
     request->send(SPIFFS, "/webpage.html", "OK");
   });
