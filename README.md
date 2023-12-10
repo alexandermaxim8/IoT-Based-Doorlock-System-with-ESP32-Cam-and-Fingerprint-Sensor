@@ -28,6 +28,8 @@ And then, the subsequent part is the ESP32-CAM system. In essence, in this syste
 
 ## Result
 [https://youtu.be/4blCHpZiUhY](https://youtu.be/4blCHpZiUhY)
+![image](https://github.com/alexandermaxim8/IoT-Based-Doorlock-System-with-ESP32-Cam-and-Fingerprint-Sensor/assets/143409662/2526a185-81f2-4169-823d-4184a0290aa0)
+
 
 ## Unsolved Issues
 Relay switching action from 1 to 0 is effecting the Smart Attendance System part to be forcingly rebooted. Likely caused by not enough of available power for the whole system, absorbed by the solenoid actuator.
